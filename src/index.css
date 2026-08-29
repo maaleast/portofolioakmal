@@ -1,0 +1,52 @@
+@import "tailwindcss";
+
+@theme {
+  --font-sans: "Plus Jakarta Sans", ui-sans-serif, system-ui, sans-serif;
+  --font-mono: "JetBrains Mono", ui-monospace, monospace;
+
+  --color-ink-950: #08090c;
+  --color-ink-900: #0d0f14;
+  --color-ink-800: #14171f;
+  --color-ink-700: #1d212b;
+  --color-ink-600: #2a2f3d;
+
+  --color-mist-100: #eef1f7;
+  --color-mist-300: #b9c0d0;
+  --color-mist-500: #7b8598;
+
+  --color-signal: #6ee7b7;
+  --color-signal-dim: #2f8f6d;
+  --color-ember: #f0a868;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  background-color: var(--color-ink-950);
+  color: var(--color-mist-100);
+  font-family: var(--font-sans);
+  -webkit-font-smoothing: antialiased;
+}
+
+::selection {
+  background: var(--color-signal);
+  color: var(--color-ink-950);
+}
+
+/* thin grid backdrop used by the hero */
+.grid-backdrop {
+  background-image:
+    linear-gradient(to right, rgba(255, 255, 255, 0.04) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(255, 255, 255, 0.04) 1px, transparent 1px);
+  background-size: 64px 64px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+  *, *::before, *::after {
+    animation-duration: 0.001ms !important;
+    transition-duration: 0.001ms !important;
+  }
+}
