@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { Download, Menu, X } from "lucide-react";
 import { navLinks, profile } from "../data/portfolio";
+import { downloadFile } from "../lib/downloadFile";
 
 export default function Navbar() {
   const [scrolled, setScrolled] = useState(false);
@@ -34,6 +35,13 @@ export default function Navbar() {
           <a
             href={profile.cvDeveloperUrl}
             download="CV Akmal Farizky Hardhana - Developer.pdf"
+            onClick={(e) => {
+              e.preventDefault();
+              downloadFile(
+                profile.cvDeveloperUrl,
+                "CV Akmal Farizky Hardhana - Developer.pdf"
+              );
+            }}
             className="flex items-center gap-1 whitespace-nowrap rounded-full border border-ink-600 px-2 py-1.5 text-[10px] font-medium tracking-wide text-mist-100 transition-colors hover:border-signal hover:text-signal sm:px-3 sm:text-xs"
           >
             <Download size={11} className="shrink-0" />
@@ -42,6 +50,13 @@ export default function Navbar() {
           <a
             href={profile.cvCreativeUrl}
             download="CV Akmal Farizky Hardhana - Creative.pdf"
+            onClick={(e) => {
+              e.preventDefault();
+              downloadFile(
+                profile.cvCreativeUrl,
+                "CV Akmal Farizky Hardhana - Creative.pdf"
+              );
+            }}
             className="flex items-center gap-1 whitespace-nowrap rounded-full border border-ink-600 px-2 py-1.5 text-[10px] font-medium tracking-wide text-mist-100 transition-colors hover:border-signal hover:text-signal sm:px-3 sm:text-xs"
           >
             <Download size={11} className="shrink-0" />

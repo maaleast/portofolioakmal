@@ -5,6 +5,7 @@ import WhatsAppIcon from "./icons/WhatsAppIcon";
 import AnimatedHeading from "./AnimatedHeading";
 import TypewriterText from "./TypewriterText";
 import AnimatedBlob from "./AnimatedBlob";
+import { downloadFile } from "../lib/downloadFile";
 
 const container = {
   hidden: {},
@@ -91,6 +92,13 @@ export default function Hero() {
             <motion.a
               href={profile.cvDeveloperUrl}
               download="CV Akmal Farizky Hardhana - Developer.pdf"
+              onClick={(e) => {
+                e.preventDefault();
+                downloadFile(
+                  profile.cvDeveloperUrl,
+                  "CV Akmal Farizky Hardhana - Developer.pdf"
+                );
+              }}
               animate={{ scale: [1, 1.045, 1] }}
               transition={{ duration: 2.4, repeat: Infinity, ease: "easeInOut", delay: 0.3 }}
               className="rounded-full border border-ink-600 px-6 py-3 text-center text-sm font-medium text-mist-100 transition-colors hover:border-mist-500"
@@ -100,6 +108,13 @@ export default function Hero() {
             <motion.a
               href={profile.cvCreativeUrl}
               download="CV Akmal Farizky Hardhana - Creative.pdf"
+              onClick={(e) => {
+                e.preventDefault();
+                downloadFile(
+                  profile.cvCreativeUrl,
+                  "CV Akmal Farizky Hardhana - Creative.pdf"
+                );
+              }}
               animate={{ scale: [1, 1.045, 1] }}
               transition={{ duration: 2.4, repeat: Infinity, ease: "easeInOut", delay: 0.45 }}
               className="rounded-full border border-ink-600 px-6 py-3 text-center text-sm font-medium text-mist-100 transition-colors hover:border-mist-500"
