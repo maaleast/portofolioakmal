@@ -32,7 +32,7 @@ export default function ThemePrompt({ onClose }) {
           <X size={16} />
         </button>
         <p className="theme-prompt-eyebrow">PREFERENCES</p>
-        <h2 id="theme-prompt-title">How would you like to view this portfolio?</h2>
+        <h2 id="theme-prompt-title">How would you like to view?</h2>
         <p className="theme-prompt-subtitle">Kamu lebih suka Dark atau Light mode?</p>
         <div className="theme-prompt-options">
           <button
