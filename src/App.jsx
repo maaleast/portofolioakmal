@@ -1,4 +1,3 @@
-import { useCallback, useState } from "react";
 import Navbar from "./components/Navbar";
 import Hero from "./components/Hero";
 import About from "./components/About";
@@ -12,24 +11,11 @@ import Education from "./components/Education";
 import Contact from "./components/Contact";
 import Footer from "./components/Footer";
 import PageLoader from "./components/PageLoader";
-import ThemePrompt from "./components/ThemePrompt";
 
 export default function App() {
-  const [showThemePrompt, setShowThemePrompt] = useState(
-    () => !localStorage.getItem("portfolio-theme")
-  );
-  const handleLoadingComplete = useCallback(() => {
-    if (!localStorage.getItem("portfolio-theme")) {
-      setShowThemePrompt(true);
-    }
-  }, []);
-
   return (
     <>
-      <PageLoader onComplete={handleLoadingComplete} />
-      {showThemePrompt && (
-        <ThemePrompt onClose={() => setShowThemePrompt(false)} />
-      )}
+      <PageLoader />
       <Navbar />
       <main>
         <Hero />
