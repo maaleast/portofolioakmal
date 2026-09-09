@@ -1,7 +1,7 @@
 import { Clapperboard } from "lucide-react";
 import Reveal from "./Reveal";
 import SectionHeading from "./SectionHeading";
-import { experience } from "../data/portfolio";
+import { creativeTools, experience } from "../data/portfolio";
 
 const trackLabel = {
   dev: "Development",
@@ -18,16 +18,17 @@ const EXPERIENCE_ICONS = {
 
 export default function Experience() {
   return (
-    <section id="experience" className="mx-auto max-w-6xl px-6 py-24 sm:py-32">
-      <Reveal>
+    <section id="experience" className="section-green-atmosphere overflow-hidden">
+      <div className="mx-auto max-w-6xl px-6 py-24 sm:py-32">
+        <Reveal>
         <SectionHeading
           index="03"
-          title="Pengalaman"
-          description="Lima peran yang berjalan beririsan, bukan berurutan rapi."
+          title="Experience"
+          description="Beragam pengalaman yang membentuk kemampuan saya di bidang teknologi, konten, dan kreativitas."
         />
-      </Reveal>
+        </Reveal>
 
-      <ol className="relative border-l border-ink-700 pl-6 sm:pl-10">
+        <ol className="relative border-l border-ink-700 pl-6 sm:pl-10">
         {experience.map((job, i) => (
           <li key={job.role + job.org} className="relative pb-12 last:pb-0">
             <span
@@ -51,7 +52,24 @@ export default function Experience() {
                     className="h-7 w-7 shrink-0 rounded-md object-contain"
                   />
                 )}
-                {job.icon &&
+                {job.track === "creative" && (
+                  <span className="flex items-center gap-1.5">
+                    {creativeTools.map((tool) => (
+                      <span
+                        key={tool.name}
+                        className="flex h-7 w-7 items-center justify-center rounded-md bg-ink-800 p-1.5"
+                        title={tool.name}
+                      >
+                        <img
+                          src={tool.logo}
+                          alt={`Logo ${tool.name}`}
+                          className="h-full w-full object-contain"
+                        />
+                      </span>
+                    ))}
+                  </span>
+                )}
+                {job.icon && job.track !== "creative" &&
                   (() => {
                     const Icon = EXPERIENCE_ICONS[job.icon];
                     return Icon ? (
@@ -102,7 +120,8 @@ export default function Experience() {
             </Reveal>
           </li>
         ))}
-      </ol>
+        </ol>
+      </div>
     </section>
   );
 }

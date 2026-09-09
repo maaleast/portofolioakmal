@@ -1,19 +1,22 @@
 import { useEffect, useState } from "react";
-import { Download, Menu, X } from "lucide-react";
+import { Download, Menu, Moon, Sun, X } from "lucide-react";
 import { navLinks, profile } from "../data/portfolio";
 import { downloadFile } from "../lib/downloadFile";
 
 const primaryNavLabels = [
-  "Tentang",
-  "Pengalaman",
-  "Keahlian",
-  "Project",
+  "About",
+  "Experience",
+  "Skills",
+  "Projects",
   "Contact",
 ];
 
 export default function Navbar() {
   const [scrolled, setScrolled] = useState(false);
   const [open, setOpen] = useState(false);
+  const [lightMode, setLightMode] = useState(
+    () => localStorage.getItem("portfolio-theme") === "light"
+  );
   const primaryLinks = navLinks.filter((link) =>
     primaryNavLabels.includes(link.label)
   );
@@ -28,6 +31,17 @@ export default function Navbar() {
     return () => window.removeEventListener("scroll", onScroll);
   }, []);
 
+  useEffect(() => {
+    document.documentElement.classList.toggle("light-mode", lightMode);
+    localStorage.setItem("portfolio-theme", lightMode ? "light" : "dark");
+  }, [lightMode]);
+
+  useEffect(() => {
+    const onThemeChange = (event) => setLightMode(event.detail.lightMode);
+    window.addEventListener("portfolio-theme-change", onThemeChange);
+    return () => window.removeEventListener("portfolio-theme-change", onThemeChange);
+  }, []);
+
   return (
     <header
       className={`fixed inset-x-0 top-0 z-50 transition-all duration-300 ${
@@ -37,22 +51,31 @@ export default function Navbar() {
       }`}
     >
       <nav className="mx-auto max-w-6xl px-4 sm:px-6">
-        <div className="flex h-16 items-center justify-between">
+        <div className="navbar-main-row relative flex h-16 items-center justify-between">
           <a
             href="#top"
-            className="font-mono text-sm tracking-tight text-mist-100 transition-colors hover:text-signal"
+            className="navbar-brand font-mono text-base font-semibold tracking-tight transition-colors hover:text-signal"
           >
             {profile.firstName.toLowerCase()}
             <span className="text-signal">.</span>
           </a>
 
-          <div className="flex items-center gap-1.5 sm:gap-2">
-            <div className="hidden items-center gap-4 lg:flex">
+          <div className="navbar-mobile-actions flex items-center gap-1.5 sm:gap-2">
+            <button
+              type="button"
+              onClick={() => setLightMode((value) => !value)}
+              aria-label={lightMode ? "Aktifkan dark mode" : "Aktifkan light mode"}
+              title={lightMode ? "Dark mode" : "Light mode"}
+              className="shrink-0 rounded-md p-2 text-mist-100 transition-colors hover:text-signal"
+            >
+              {lightMode ? <Moon size={18} /> : <Sun size={18} />}
+            </button>
+            <div className="absolute left-1/2 hidden -translate-x-1/2 items-center gap-5 lg:flex">
               {primaryLinks.map((link) => (
                 <a
                   key={link.href}
                   href={link.href}
-                  className="text-xs text-mist-300 transition-colors hover:text-signal"
+                  className="font-sans text-[13px] font-medium tracking-wide text-mist-300 transition-colors hover:text-signal"
                 >
                   {link.label}
                 </a>
@@ -61,7 +84,7 @@ export default function Navbar() {
             <button
               type="button"
               onClick={() => setOpen((v) => !v)}
-              aria-label={open ? "Tutup menu" : "Buka menu"}
+              aria-label={open ? "Close menu" : "Open menu"}
               aria-expanded={open}
               className="shrink-0 rounded-md p-2 text-mist-100 transition-colors hover:text-signal"
             >
@@ -75,7 +98,7 @@ export default function Navbar() {
             <a
               key={link.href}
               href={link.href}
-              className="shrink-0 text-[11px] text-mist-300 transition-colors hover:text-signal"
+              className="shrink-0 font-sans text-xs font-medium tracking-wide text-mist-300 transition-colors hover:text-signal"
             >
               {link.label}
             </a>
@@ -86,7 +109,7 @@ export default function Navbar() {
       {open && (
         <div className="border-t border-ink-700 bg-ink-950/95 backdrop-blur-md">
           <ul className="mx-auto max-w-6xl px-6 py-4 sm:px-6">
-            {[...primaryLinks, ...secondaryLinks].map((link, i, links) => (
+            {secondaryLinks.map((link, i, links) => (
               <li key={link.href}>
                 <a
                   href={link.href}

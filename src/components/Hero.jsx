@@ -1,5 +1,5 @@
 import { motion } from "framer-motion";
-import { ArrowDown, MapPin, CirclePlay, Mail } from "lucide-react";
+import { ArrowDown } from "lucide-react";
 import { profile } from "../data/portfolio";
 import WhatsAppIcon from "./icons/WhatsAppIcon";
 import AnimatedHeading from "./AnimatedHeading";
@@ -21,42 +21,50 @@ export default function Hero() {
   return (
     <section
       id="top"
-      className="relative flex min-h-screen items-center overflow-hidden pt-16"
+      className="hero-intro relative flex min-h-screen items-center overflow-hidden pt-16"
     >
       <div className="grid-backdrop absolute inset-0 opacity-60" />
+      <div className="hero-atmosphere" aria-hidden="true" />
+      <div className="hero-green-glow hero-green-glow-left" aria-hidden="true" />
+      <div className="hero-green-glow hero-green-glow-center" aria-hidden="true" />
+      <div className="hero-green-glow hero-green-glow-right" aria-hidden="true" />
       <AnimatedBlob
         variant={0}
         duration={20}
-        className="-top-40 left-1/2 ml-[-360px] h-[420px] w-[720px] bg-signal/10"
+        className="-top-40 left-1/2 ml-[-360px] h-[420px] w-[720px] bg-signal/10 opacity-40"
       />
 
-      <div className="relative mx-auto grid w-full max-w-6xl items-center gap-12 px-6 py-20 lg:grid-cols-[1.1fr_0.9fr] lg:gap-16">
-        <motion.div variants={container} initial="hidden" animate="show">
+      <div className="relative mx-auto w-full max-w-5xl px-6 py-20 text-center">
+        <motion.div
+          variants={container}
+          initial="hidden"
+          animate="show"
+          className="mx-auto flex max-w-4xl flex-col items-center"
+        >
           <motion.p
             variants={item}
-            className="mb-6 flex items-center gap-2 font-mono text-xs tracking-[0.2em] text-signal"
+            className="mb-7 flex items-center justify-center"
           >
-            <motion.span
-              animate={{ opacity: [1, 0.4, 1], scale: [1, 1.3, 1] }}
-              transition={{ duration: 1.8, repeat: Infinity, ease: "easeInOut" }}
-              className="inline-block h-1.5 w-1.5 rounded-full bg-signal"
-            />
-            <motion.span
-              animate={{ opacity: [1, 0.55, 1] }}
-              transition={{ duration: 2.6, repeat: Infinity, ease: "easeInOut" }}
-            >
-              TERSEDIA UNTUK KERJA SAMA
-            </motion.span>
+            {profile.photoUrl && (
+              <img
+                src={profile.photoUrl}
+                alt={profile.name}
+                className="h-24 w-24 rounded-full border-2 border-signal/60 object-cover object-[center_20%] shadow-lg shadow-signal/20"
+              />
+            )}
           </motion.p>
 
           <motion.h1
             variants={item}
-            className="max-w-3xl text-4xl font-semibold leading-[1.1] tracking-tight text-mist-100 sm:text-6xl lg:text-7xl"
+            className="max-w-4xl text-4xl font-semibold leading-[1.08] tracking-tight text-mist-100 sm:text-6xl lg:text-7xl"
           >
-            <AnimatedHeading text={`Hi, saya ${profile.firstName}.`} />
+            <AnimatedHeading
+              text={`Hi, I'm ${profile.firstName}.`}
+              className="w-full justify-center"
+            />
             <AnimatedHeading
               text={profile.role}
-              className="mt-2 text-mist-500"
+              className="mt-2 w-full justify-center text-mist-500"
               wordDelay={0.06}
               block
             />
@@ -64,30 +72,35 @@ export default function Hero() {
 
           <motion.p
             variants={item}
-            className="mt-8 max-w-xl text-base leading-relaxed text-mist-300 sm:text-lg"
+            className="mt-7 max-w-2xl text-base leading-relaxed text-mist-300 sm:text-lg"
           >
             <TypewriterText text={profile.tagline} />
           </motion.p>
+        </motion.div>
 
-          <motion.div variants={item} className="mt-10 grid grid-cols-2 gap-3">
+        <motion.div
+          variants={container}
+          initial="hidden"
+          animate="show"
+          className="mx-auto mt-10 max-w-3xl border-t border-ink-700/80 pt-8"
+        >
+          <motion.div variants={item} className="mx-auto grid max-w-2xl grid-cols-2 gap-3">
             <motion.a
               href="#projects"
               animate={{ scale: [1, 1.045, 1] }}
               transition={{ duration: 2.4, repeat: Infinity, ease: "easeInOut", delay: 0 }}
               className="rounded-full bg-signal px-6 py-3 text-center text-sm font-semibold text-ink-950 transition-transform hover:-translate-y-0.5"
             >
-              Lihat Project
+              View Projects
             </motion.a>
             <motion.a
-              href={profile.whatsappUrl}
-              target="_blank"
-              rel="noreferrer"
+              href="#contact"
               animate={{ scale: [1, 1.045, 1] }}
               transition={{ duration: 2.4, repeat: Infinity, ease: "easeInOut", delay: 0.15 }}
-              className="flex items-center justify-center gap-2 rounded-full bg-[#25D366] px-6 py-3 text-sm font-semibold text-ink-950 transition-transform hover:-translate-y-0.5"
+              className="whatsapp-action flex items-center justify-center gap-2 rounded-full bg-[#25D366] px-6 py-3 text-sm font-semibold text-ink-950 transition-transform hover:-translate-y-0.5"
             >
               <WhatsAppIcon size={16} />
-              Hubungi Saya
+              Contact Me
             </motion.a>
             <motion.a
               href={profile.cvDeveloperUrl}
@@ -101,7 +114,7 @@ export default function Hero() {
               }}
               animate={{ scale: [1, 1.045, 1] }}
               transition={{ duration: 2.4, repeat: Infinity, ease: "easeInOut", delay: 0.3 }}
-              className="rounded-full border border-ink-600 px-6 py-3 text-center text-sm font-medium text-mist-100 transition-colors hover:border-mist-500"
+              className="rounded-full border border-signal-dim bg-ink-950/85 px-6 py-3 text-center text-sm font-medium text-mist-100 shadow-lg shadow-ink-950/30 transition-colors hover:border-signal hover:bg-ink-900"
             >
               Download CV Developer
             </motion.a>
@@ -117,63 +130,14 @@ export default function Hero() {
               }}
               animate={{ scale: [1, 1.045, 1] }}
               transition={{ duration: 2.4, repeat: Infinity, ease: "easeInOut", delay: 0.45 }}
-              className="rounded-full border border-ink-600 px-6 py-3 text-center text-sm font-medium text-mist-100 transition-colors hover:border-mist-500"
+              className="rounded-full border border-signal-dim bg-ink-950/85 px-6 py-3 text-center text-sm font-medium text-mist-100 shadow-lg shadow-ink-950/30 transition-colors hover:border-signal hover:bg-ink-900"
             >
               Download CV Creative
             </motion.a>
           </motion.div>
 
-          <motion.ul
-            variants={item}
-            className="mt-14 flex flex-wrap items-center gap-2 text-sm text-mist-500"
-          >
-            <li className="flex items-center gap-2 rounded-full border border-ink-700 px-4 py-2">
-              <MapPin size={15} /> {profile.location}
-            </li>
-            <li>
-              <a
-                href={`mailto:${profile.email}`}
-                className="flex items-center gap-2 rounded-full border border-ink-700 px-4 py-2 transition-colors hover:border-ink-600 hover:text-mist-100"
-              >
-                <Mail size={15} /> {profile.email}
-              </a>
-            </li>
-            <li>
-              <a
-                href={profile.whatsappUrl}
-                target="_blank"
-                rel="noreferrer"
-                className="flex items-center gap-2 rounded-full border border-ink-700 px-4 py-2 transition-colors hover:border-ink-600 hover:text-mist-100"
-              >
-                <WhatsAppIcon size={15} /> {profile.whatsapp}
-              </a>
-            </li>
-            <li>
-              <a
-                href={profile.youtube}
-                target="_blank"
-                rel="noreferrer"
-                className="flex items-center gap-2 rounded-full border border-ink-700 px-4 py-2 transition-colors hover:border-ink-600 hover:text-mist-100"
-              >
-                <CirclePlay size={15} /> Kepikiran Aja
-              </a>
-            </li>
-          </motion.ul>
         </motion.div>
 
-        {profile.photoUrl && (
-          <motion.img
-            src={profile.photoUrl}
-            alt={profile.name}
-            initial={{ opacity: 0, y: 0 }}
-            animate={{ opacity: 1, y: [0, -16, 0] }}
-            transition={{
-              opacity: { duration: 0.8, ease: [0.22, 1, 0.36, 1] },
-              y: { duration: 4, repeat: Infinity, ease: "easeInOut", delay: 0.8 },
-            }}
-            className="mx-auto w-full max-w-sm object-contain lg:max-w-none"
-          />
-        )}
       </div>
 
       <a

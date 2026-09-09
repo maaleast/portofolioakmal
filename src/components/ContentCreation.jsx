@@ -6,7 +6,7 @@ import { profile, contentSkills, featuredVideos } from "../data/portfolio";
 
 export default function ContentCreation() {
   return (
-    <section id="content" className="relative overflow-hidden">
+    <section id="content" className="section-green-atmosphere relative overflow-hidden">
       <AnimatedBlob
         variant={2}
         duration={18}

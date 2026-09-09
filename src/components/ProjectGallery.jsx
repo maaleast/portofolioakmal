@@ -1,4 +1,4 @@
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { motion } from "framer-motion";
 import {
   ArrowUpRight,
@@ -12,6 +12,9 @@ import {
   Mountain,
   Clapperboard,
   Scissors,
+  Utensils,
+  CloudSun,
+  Search,
 } from "lucide-react";
 import Reveal from "./Reveal";
 import SectionHeading from "./SectionHeading";
@@ -28,11 +31,46 @@ function shuffle(list) {
   return result;
 }
 
+function getProjectThumbnail(url) {
+  if (!url) return null;
+
+  const youtubeMatch = url.match(/(?:shorts\/|watch\?v=|youtu\.be\/)([^?&/]+)/);
+  if (youtubeMatch) {
+    return `https://i.ytimg.com/vi/${youtubeMatch[1]}/hqdefault.jpg`;
+  }
+
+  return null;
+}
+
 // Game / Konten / Developer (semua kategori web development lain).
 function bucketOf(project) {
   if (project.category === "Game") return "game";
-  if (project.category === "Video & Konten") return "content";
+  if (project.category === "Video & Content") return "content";
   return "dev";
+}
+
+function isSoftwareProject(project) {
+  const softwareCategories = [
+    "Fullstack Web Development",
+    "Frontend Web Development",
+  ];
+
+  return (
+    softwareCategories.includes(project.category) ||
+    project.categories?.some((category) => softwareCategories.includes(category))
+  );
+}
+
+function displayCategory(project) {
+  return isSoftwareProject(project) ? "IT & Software Development" : project.category;
+}
+
+function orderGameProjects(list) {
+  return [...list].sort((first, second) => {
+    const firstIsRoblox = first.tech?.includes("Roblox Studio") ? 0 : 1;
+    const secondIsRoblox = second.tech?.includes("Roblox Studio") ? 0 : 1;
+    return firstIsRoblox - secondIsRoblox;
+  });
 }
 
 // Untuk tab "Semua": halaman pertama diacak berisi 1 project Game,
@@ -43,12 +81,21 @@ function buildRandomOrder(list) {
   list.forEach((p) => buckets[bucketOf(p)].push(p));
 
   const shuffledGame = shuffle(buckets.game);
-  const shuffledDev = shuffle(buckets.dev);
+  const shuffledDev = shuffle(buckets.dev.filter((project) => !project.private));
   const shuffledContent = shuffle(buckets.content);
 
-  const featured = [shuffledGame[0], shuffledDev[0], shuffledContent[0]].filter(
-    Boolean
+  const preferredGame = shuffledGame.find(
+    (project) => project.title === "Ikuti Kata Budi!"
   );
+  const preferredContent = shuffledContent.find(
+    (project) => project.title === "Konten Motion Graphics & Video Editing"
+  );
+
+  const featured = [
+    preferredContent || shuffledContent[0],
+    preferredGame || shuffledGame[0],
+    shuffledDev[0],
+  ].filter(Boolean);
   const featuredTitles = new Set(featured.map((p) => p.title));
   const rest = shuffle(list.filter((p) => !featuredTitles.has(p.title)));
 
@@ -67,6 +114,8 @@ const PROJECT_ICONS = {
   Mountain,
   Clapperboard,
   Scissors,
+  Utensils,
+  CloudSun,
 };
 
 // Beberapa varian animasi supaya tiap icon tidak bergerak identik.
@@ -79,6 +128,7 @@ const ICON_MOTION = [
 
 function ProjectCard({ project, index }) {
   const clickable = !project.private && Boolean(project.url);
+  const projectImage = project.image || getProjectThumbnail(project.url);
 
   const Icon = PROJECT_ICONS[project.icon] || Sparkles;
   const motionProps = ICON_MOTION[index % ICON_MOTION.length];
@@ -90,16 +140,16 @@ function ProjectCard({ project, index }) {
       }`}
     >
       <div className="relative flex aspect-[16/10] items-center justify-center overflow-hidden bg-ink-800">
-        {!project.private && project.image && (
+        {!project.private && projectImage && (
           <img
-            src={project.image}
+            src={projectImage}
             alt={project.title}
             loading="lazy"
             className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
           />
         )}
 
-        {!project.image && <div className="grid-backdrop absolute inset-0" />}
+        {!projectImage && <div className="grid-backdrop absolute inset-0" />}
 
         {project.private ? (
           <div className="relative flex flex-col items-center gap-2 text-mist-500">
@@ -115,7 +165,7 @@ function ProjectCard({ project, index }) {
             </span>
           </div>
         ) : (
-          !project.image && (
+          !projectImage && (
             <motion.div
               {...motionProps}
               className="relative rounded-full border border-ink-600 bg-ink-900 p-4 text-signal"
@@ -128,7 +178,7 @@ function ProjectCard({ project, index }) {
 
       <div className="flex flex-1 flex-col p-5">
         <span className="font-mono text-[10px] uppercase tracking-widest text-signal">
-          {project.category}
+          {displayCategory(project)}
         </span>
         <h3 className="mt-2 text-base font-semibold text-mist-100">
           {project.title}
@@ -141,6 +191,12 @@ function ProjectCard({ project, index }) {
           <p className="mt-3 flex items-center gap-1.5 font-mono text-[10px] uppercase tracking-widest text-mist-500">
             <Lock size={11} />
             Proyek privat{project.company ? ` — ${project.company}` : ""}, tidak dapat dibuka publik
+          </p>
+        )}
+
+        {project.notice && (
+          <p className="mt-3 rounded-md border border-yellow-500/40 bg-yellow-500/10 px-3 py-2 font-mono text-[10px] leading-relaxed text-yellow-300">
+            {project.notice}
           </p>
         )}
 
@@ -174,34 +230,89 @@ function ProjectCard({ project, index }) {
 }
 
 export default function ProjectGallery() {
-  const [active, setActive] = useState("Semua");
+  const [active, setActive] = useState("All Projects");
   const [page, setPage] = useState(0);
+  const [searchQuery, setSearchQuery] = useState("");
+
+  useEffect(() => {
+    setPage(0);
+  }, [active, searchQuery]);
 
   const ordered = useMemo(() => {
-    const filtered =
-      active === "Semua"
-        ? projects
-        : projects.filter((p) => p.category === active);
+    const normalizedQuery = searchQuery.trim().toLowerCase();
+    const filtered = projects.filter((project) => {
+      const matchesCategory =
+        active === "All Projects" ||
+        (active === "IT & Software Development" && isSoftwareProject(project)) ||
+        project.category === active ||
+        project.categories?.includes(active);
+      const searchableText = [
+        project.title,
+        project.description,
+        displayCategory(project),
+        ...(project.tech || []),
+      ]
+        .join(" ")
+        .toLowerCase();
 
-    return active === "Semua" ? buildRandomOrder(filtered) : shuffle(filtered);
-  }, [active]);
+      return matchesCategory && (!normalizedQuery || searchableText.includes(normalizedQuery));
+    });
+
+    if (active === "Game") return orderGameProjects(filtered);
+
+    return active === "All Projects" && !normalizedQuery
+      ? buildRandomOrder(filtered)
+      : shuffle(filtered);
+  }, [active, searchQuery]);
 
   const totalPages = Math.max(1, Math.ceil(ordered.length / PAGE_SIZE));
   const visible = ordered.slice(page * PAGE_SIZE, page * PAGE_SIZE + PAGE_SIZE);
 
+  const pagination = ordered.length > PAGE_SIZE ? (
+    <div className="flex flex-wrap items-center justify-between gap-3 border-y border-ink-700 py-3">
+      <span className="text-xs text-mist-500">
+        Showing {page * PAGE_SIZE + 1}-{Math.min((page + 1) * PAGE_SIZE, ordered.length)} of {ordered.length} projects
+      </span>
+      <div className="flex items-center gap-2">
+        <button
+          type="button"
+          onClick={() => setPage((current) => Math.max(0, current - 1))}
+          disabled={page === 0}
+          aria-label="Previous page"
+          className="flex h-8 items-center gap-1 rounded-md border border-ink-700 px-2.5 text-xs text-mist-300 transition-colors hover:border-signal hover:text-signal disabled:cursor-not-allowed disabled:opacity-30"
+        >
+          <ChevronLeft size={14} /> Previous
+        </button>
+        <span className="min-w-16 text-center font-mono text-xs text-mist-300">
+          Page {page + 1} / {totalPages}
+        </span>
+        <button
+          type="button"
+          onClick={() => setPage((current) => Math.min(totalPages - 1, current + 1))}
+          disabled={page >= totalPages - 1}
+          aria-label="Next page"
+          className="flex h-8 items-center gap-1 rounded-md border border-ink-700 px-2.5 text-xs text-mist-300 transition-colors hover:border-signal hover:text-signal disabled:cursor-not-allowed disabled:opacity-30"
+        >
+          Next <ChevronRight size={14} />
+        </button>
+      </div>
+    </div>
+  ) : null;
+
   return (
-    <section id="projects" className="border-t border-ink-800 bg-ink-900/40">
+    <section id="projects" className="section-green-atmosphere border-t border-ink-800 bg-ink-900/40">
       <div className="mx-auto max-w-6xl px-6 py-24 sm:py-32">
         <Reveal>
           <SectionHeading
             index="04"
             title="Project"
-            description="Semua yang pernah saya bangun, dari aplikasi web sampai game dan konten."
+            description="Kumpulan karya dan proyek yang merepresentasikan pengalaman, kreativitas, dan keahlian saya di berbagai bidang."
           />
         </Reveal>
 
         <Reveal>
-          <div className="mb-10 flex flex-wrap gap-2">
+          <div className="mb-5 flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between">
+            <div className="flex flex-wrap gap-2">
             {projectCategories.map((cat) => (
               <button
                 key={cat}
@@ -219,8 +330,22 @@ export default function ProjectGallery() {
                 {cat}
               </button>
             ))}
+            </div>
+            <label className="relative block w-full lg:max-w-xs">
+              <Search size={15} className="pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 text-mist-500" />
+              <input
+                type="search"
+                value={searchQuery}
+                onChange={(event) => setSearchQuery(event.target.value)}
+                placeholder="Search projects..."
+                aria-label="Search projects"
+                className="w-full rounded-full border border-ink-700 bg-ink-900/80 py-2 pl-9 pr-4 text-xs text-mist-100 outline-none transition-colors placeholder:text-mist-500 focus:border-signal"
+              />
+            </label>
           </div>
         </Reveal>
+
+        {pagination && <div className="mb-5">{pagination}</div>}
 
         <motion.div
           layout
@@ -239,33 +364,7 @@ export default function ProjectGallery() {
           </p>
         )}
 
-        {ordered.length > PAGE_SIZE && (
-          <div className="mt-10 flex items-center justify-center gap-4">
-            <button
-              type="button"
-              onClick={() => setPage((p) => Math.max(0, p - 1))}
-              disabled={page === 0}
-              aria-label="Halaman sebelumnya"
-              className="flex h-9 w-9 items-center justify-center rounded-full border border-ink-700 text-mist-500 transition-colors hover:border-signal hover:text-signal disabled:cursor-not-allowed disabled:opacity-30 disabled:hover:border-ink-700 disabled:hover:text-mist-500"
-            >
-              <ChevronLeft size={16} />
-            </button>
-
-            <span className="font-mono text-xs text-mist-500">
-              {page + 1} / {totalPages}
-            </span>
-
-            <button
-              type="button"
-              onClick={() => setPage((p) => Math.min(totalPages - 1, p + 1))}
-              disabled={page >= totalPages - 1}
-              aria-label="Halaman berikutnya"
-              className="flex h-9 w-9 items-center justify-center rounded-full border border-ink-700 text-mist-500 transition-colors hover:border-signal hover:text-signal disabled:cursor-not-allowed disabled:opacity-30 disabled:hover:border-ink-700 disabled:hover:text-mist-500"
-            >
-              <ChevronRight size={16} />
-            </button>
-          </div>
-        )}
+        {pagination && <div className="mt-5">{pagination}</div>}
       </div>
     </section>
   );

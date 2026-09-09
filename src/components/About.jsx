@@ -5,7 +5,7 @@ import { about } from "../data/portfolio";
 
 export default function About() {
   return (
-    <section id="about" className="relative overflow-hidden">
+    <section id="about" className="section-green-atmosphere relative overflow-hidden">
       <AnimatedBlob
         variant={0}
         duration={26}
@@ -14,7 +14,7 @@ export default function About() {
 
       <div className="relative mx-auto max-w-6xl px-6 py-24 sm:py-32">
         <Reveal>
-          <SectionHeading index="01" title="Tentang saya" />
+          <SectionHeading index="01" title="About Me" />
         </Reveal>
 
         <div className="grid gap-12 lg:grid-cols-[1.1fr_1fr] lg:gap-20">
@@ -31,7 +31,7 @@ export default function About() {
               {about.stats.map((s) => (
                 <div
                   key={s.label}
-                  className="rounded-xl border border-ink-700 bg-ink-900/60 p-4"
+                  className="stat-breathe-card rounded-xl border border-ink-700 bg-ink-900/60 p-4"
                 >
                   <div className="font-mono text-xl font-semibold text-signal">
                     {s.value}
@@ -49,7 +49,7 @@ export default function About() {
               {about.highlights.map((h) => (
                 <li
                   key={h.label}
-                  className="group flex items-baseline justify-between gap-6 bg-ink-900/60 px-5 py-5 transition-colors hover:bg-ink-800"
+                  className="about-highlight-breathe group flex items-baseline justify-between gap-6 bg-ink-900/60 px-5 py-5 transition-colors hover:bg-ink-800"
                 >
                   <span className="text-sm font-medium text-mist-100">
                     {h.label}

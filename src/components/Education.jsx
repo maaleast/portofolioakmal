@@ -5,14 +5,15 @@ import { education, certifications } from "../data/portfolio";
 
 export default function Education() {
   return (
-    <section className="mx-auto max-w-6xl px-6 py-24 sm:py-32">
-      <Reveal>
-        <SectionHeading index="08" title="Pendidikan & sertifikasi" />
-      </Reveal>
-
-      <div className="grid gap-10 lg:grid-cols-[1fr_1.3fr] lg:gap-16">
+    <section className="section-green-atmosphere overflow-hidden">
+      <div className="mx-auto max-w-6xl px-6 py-24 sm:py-32">
         <Reveal>
-          <div className="rounded-2xl border border-ink-700 bg-ink-900 p-6">
+        <SectionHeading index="08" title="Pendidikan & sertifikasi" />
+        </Reveal>
+
+        <div className="grid gap-10 lg:grid-cols-[1fr_1.3fr] lg:gap-16">
+        <Reveal>
+          <div className="education-card-breathe rounded-2xl border border-ink-700 bg-ink-900 p-6">
             {education.logo ? (
               <img
                 src={education.logo}
@@ -44,11 +45,14 @@ export default function Education() {
               </div>
             )}
 
-            <p className="mt-4 font-mono text-xs text-mist-500">
-              {education.period}
-              <span className="mx-2 text-ink-600">/</span>
-              {education.detail}
-            </p>
+            <div className="mt-5 flex flex-wrap items-center gap-3">
+              <span className="font-mono text-xs text-mist-500">
+                {education.period}
+              </span>
+              <span className="education-gpa rounded-md border border-signal-dim/45 bg-signal/5 px-2.5 py-1.5 font-mono text-xs font-medium text-signal">
+                {education.detail}
+              </span>
+            </div>
           </div>
         </Reveal>
 
@@ -68,6 +72,7 @@ export default function Education() {
             ))}
           </ul>
         </Reveal>
+        </div>
       </div>
     </section>
   );

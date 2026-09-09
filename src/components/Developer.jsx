@@ -5,7 +5,7 @@ import { developerTools } from "../data/portfolio";
 
 export default function Developer() {
   return (
-    <section id="developer" className="relative overflow-hidden border-t border-ink-800">
+    <section id="developer" className="section-green-atmosphere relative overflow-hidden border-t border-ink-800">
       <AnimatedBlob
         variant={2}
         duration={21}
@@ -17,7 +17,7 @@ export default function Developer() {
           <SectionHeading
             index="06"
             title="Developer"
-            description="Tumpukan teknologi yang paling sering saya gunakan untuk membangun aplikasi web, backend, dan game."
+            description="Teknologi yang paling sering saya gunakan untuk membangun aplikasi web, sistem server, dan game."
           />
         </Reveal>
 
@@ -28,7 +28,9 @@ export default function Developer() {
                 <img
                   src={tool.logo}
                   alt={`Logo ${tool.name}`}
-                  className="h-9 w-9 object-contain"
+                  className={`h-9 w-9 object-contain ${
+                    tool.name === "Express.js" ? "express-logo" : ""
+                  }`}
                 />
                 <span className="text-xs font-medium text-mist-300">
                   {tool.name}

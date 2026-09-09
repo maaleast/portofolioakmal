@@ -8,7 +8,7 @@ export default function Creative() {
   return (
     <section
       id="editing"
-      className="relative overflow-hidden border-t border-ink-800 bg-ink-900/40"
+      className="section-green-atmosphere relative overflow-hidden border-t border-ink-800 bg-ink-900/40"
     >
       <AnimatedBlob
         variant={0}
@@ -21,7 +21,7 @@ export default function Creative() {
           <SectionHeading
             index="07"
             title="Video editing"
-            description="Mengedit secara profesional sejak 2020, dari format pendek sampai konten panjang."
+            description="Melakukan editing secara profesional sejak 2020"
           />
         </Reveal>
 
