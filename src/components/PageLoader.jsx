@@ -4,26 +4,13 @@ export default function PageLoader({ onComplete }) {
   const [visible, setVisible] = useState(true);
 
   useEffect(() => {
-    const start = performance.now();
-    let timeoutId;
-
-    const finishLoading = () => {
-      const remaining = Math.max(0, 650 - (performance.now() - start));
-      timeoutId = window.setTimeout(() => {
-        setVisible(false);
-        onComplete?.();
-      }, remaining);
-    };
-
-    if (document.readyState === "complete") {
-      finishLoading();
-    } else {
-      window.addEventListener("load", finishLoading, { once: true });
-    }
+    const frameId = window.requestAnimationFrame(() => {
+      setVisible(false);
+      onComplete?.();
+    });
 
     return () => {
-      window.removeEventListener("load", finishLoading);
-      window.clearTimeout(timeoutId);
+      window.cancelAnimationFrame(frameId);
     };
   }, [onComplete]);
 
