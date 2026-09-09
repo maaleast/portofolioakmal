@@ -429,5 +429,5 @@ export const navLinks = [
   { label: "Konten", href: "#content" },
   { label: "Developer", href: "#developer" },
   { label: "Editing", href: "#editing" },
-  { label: "Kontak", href: "#contact" },
+  { label: "Contact", href: "#contact" },
 ];
