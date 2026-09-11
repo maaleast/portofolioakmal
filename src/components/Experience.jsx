@@ -1,4 +1,5 @@
-import { Clapperboard } from "lucide-react";
+import { useState } from "react";
+import { ChevronDown, Clapperboard } from "lucide-react";
 import Reveal from "./Reveal";
 import SectionHeading from "./SectionHeading";
 import { creativeTools, experience } from "../data/portfolio";
@@ -6,8 +7,8 @@ import { creativeTools, experience } from "../data/portfolio";
 const trackLabel = {
   dev: "Development",
   game: "Game",
-  content: "Konten",
-  creative: "Kreatif",
+  content: "Content Creator",
+  creative: "Creative",
 };
 
 // Icon fallback untuk pengalaman yang tidak punya logo perusahaan
@@ -17,6 +18,8 @@ const EXPERIENCE_ICONS = {
 };
 
 export default function Experience() {
+  const [openExperiences, setOpenExperiences] = useState([]);
+
   return (
     <section id="experience" className="section-green-atmosphere overflow-hidden">
       <div className="mx-auto max-w-6xl px-6 py-24 sm:py-32">
@@ -31,6 +34,11 @@ export default function Experience() {
         <ol className="relative border-l border-ink-700 pl-6 sm:pl-10">
         {experience.map((job, i) => (
           <li key={job.role + job.org} className="relative pb-12 last:pb-0">
+            {(() => {
+              const isOpen = openExperiences.includes(i);
+
+              return (
+                <>
             <span
               className={`absolute -left-[1.6rem] top-1.5 h-2.5 w-2.5 rounded-full sm:-left-[2.85rem] ${
                 job.current ? "bg-signal" : "bg-ink-600"
@@ -52,9 +60,9 @@ export default function Experience() {
                     className="h-7 w-7 shrink-0 rounded-md object-contain"
                   />
                 )}
-                {job.track === "creative" && (
+                {(job.tools || (job.track === "creative" ? creativeTools : [])).length > 0 && (
                   <span className="flex items-center gap-1.5">
-                    {creativeTools.map((tool) => (
+                    {(job.tools || creativeTools).map((tool) => (
                       <span
                         key={tool.name}
                         className="flex h-7 w-7 items-center justify-center rounded-md bg-ink-800 p-1.5"
@@ -86,17 +94,39 @@ export default function Experience() {
                 <span className="font-mono text-xs">{job.period}</span>
               </p>
 
-              <ul className="mt-4 space-y-2">
-                {job.points.map((p) => (
-                  <li
-                    key={p}
-                    className="flex gap-3 text-sm leading-relaxed text-mist-300"
-                  >
-                    <span className="mt-2 h-1 w-1 shrink-0 rounded-full bg-ink-600" />
-                    {p}
-                  </li>
-                ))}
-              </ul>
+              <button
+                type="button"
+                onClick={() =>
+                  setOpenExperiences((current) =>
+                    isOpen
+                      ? current.filter((index) => index !== i)
+                      : [...current, i]
+                  )
+                }
+                aria-expanded={isOpen}
+                aria-controls={`experience-details-${i}`}
+                className="experience-details-button mt-4 flex items-center gap-2 rounded-md border border-signal-dim/60 bg-signal/5 px-3 py-2 text-xs font-medium text-signal transition-all hover:-translate-y-0.5 hover:border-signal hover:bg-signal/10 hover:shadow-[0_0_18px_color-mix(in_srgb,var(--color-signal)_22%,transparent)]"
+              >
+                {isOpen ? "Tutup detail" : "Baca selengkapnya"}
+                <ChevronDown
+                  size={15}
+                  className={`transition-transform duration-200 ${isOpen ? "rotate-180" : ""}`}
+                />
+              </button>
+
+              {isOpen && (
+                <ul id={`experience-details-${i}`} className="mt-4 space-y-2">
+                  {job.points.map((p) => (
+                    <li
+                      key={p}
+                      className="flex gap-3 text-sm leading-relaxed text-mist-300"
+                    >
+                      <span className="mt-2 h-1 w-1 shrink-0 rounded-full bg-ink-600" />
+                      {p}
+                    </li>
+                  ))}
+                </ul>
+              )}
 
               {job.logo && job.stats?.length > 0 && (
                 <div className="mt-5 flex items-center gap-4 rounded-xl border border-ink-700 bg-ink-900/60 p-4">
@@ -118,6 +148,9 @@ export default function Experience() {
                 </div>
               )}
             </Reveal>
+                </>
+              );
+            })()}
           </li>
         ))}
         </ol>

@@ -305,7 +305,7 @@ export default function ProjectGallery() {
         <Reveal>
           <SectionHeading
             index="04"
-            title="Project"
+            title="Projects"
             description="Kumpulan karya dan proyek yang merepresentasikan pengalaman, kreativitas, dan keahlian saya di berbagai bidang."
           />
         </Reveal>

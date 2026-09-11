@@ -34,7 +34,7 @@ export default function Hero() {
         className="-top-40 left-1/2 ml-[-360px] h-[420px] w-[720px] bg-signal/10 opacity-40"
       />
 
-      <div className="relative mx-auto w-full max-w-5xl px-6 py-20 text-center">
+      <div className="relative mx-auto w-full max-w-5xl -translate-y-[17px] px-6 py-20 text-center sm:-translate-y-[29px]">
         <motion.div
           variants={container}
           initial="hidden"
@@ -49,26 +49,24 @@ export default function Hero() {
               <img
                 src={profile.photoUrl}
                 alt={profile.name}
-                className="h-24 w-24 rounded-full border-2 border-signal/60 object-cover object-[center_20%] shadow-lg shadow-signal/20"
+                className="h-28 w-28 rounded-full border-2 border-signal/60 object-cover object-[center_20%] shadow-lg shadow-signal/20"
               />
             )}
           </motion.p>
 
-          <motion.h1
-            variants={item}
+          <h1
             className="max-w-4xl text-4xl font-semibold leading-[1.08] tracking-tight text-mist-100 sm:text-6xl lg:text-7xl"
           >
             <AnimatedHeading
               text={`Hi, I'm ${profile.firstName}.`}
-              className="w-full justify-center"
+              className="hero-liquid-text hero-liquid-primary w-full justify-center"
             />
             <AnimatedHeading
               text={profile.role}
-              className="mt-2 w-full justify-center text-mist-500"
-              wordDelay={0.06}
+              className="hero-liquid-text hero-liquid-secondary mt-2 w-full justify-center text-mist-500"
               block
             />
-          </motion.h1>
+          </h1>
 
           <motion.p
             variants={item}
@@ -143,9 +141,9 @@ export default function Hero() {
       <a
         href="#about"
         aria-label="Gulir ke bawah"
-        className="absolute bottom-8 left-1/2 -translate-x-1/2 text-mist-500 transition-colors hover:text-signal"
+        className="absolute bottom-5 left-1/2 z-20 -translate-x-1/2 rounded-full border border-signal/45 bg-ink-950/75 p-1.5 text-signal drop-shadow-[0_0_8px_color-mix(in_srgb,var(--color-signal)_45%,transparent)] transition-colors hover:text-mist-100 sm:bottom-6 sm:p-2"
       >
-        <ArrowDown size={18} className="animate-bounce" />
+        <ArrowDown size={20} strokeWidth={2.5} className="h-5 w-5 animate-bounce sm:h-6 sm:w-6" />
       </a>
     </section>
   );

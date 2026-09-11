@@ -14,19 +14,23 @@ export default function Education() {
         <div className="grid gap-10 lg:grid-cols-[1fr_1.3fr] lg:gap-16">
         <Reveal>
           <div className="education-card-breathe rounded-2xl border border-ink-700 bg-ink-900 p-6">
-            {education.logo ? (
-              <img
-                src={education.logo}
-                alt={`Logo ${education.school}`}
-                className="h-10 w-10 rounded-lg object-contain"
-              />
-            ) : (
-              <GraduationCap size={20} className="text-signal" />
-            )}
-            <h3 className="mt-5 text-lg font-semibold text-mist-100">
-              {education.degree}
-            </h3>
-            <p className="mt-1 text-sm text-mist-500">{education.school}</p>
+            <div className="flex items-center gap-4">
+              {education.logo ? (
+                <img
+                  src={education.logo}
+                  alt={`Logo ${education.school}`}
+                  className="h-14 w-14 shrink-0 rounded-lg object-contain"
+                />
+              ) : (
+                <GraduationCap size={20} className="shrink-0 text-signal" />
+              )}
+              <div>
+                <h3 className="text-lg font-semibold text-mist-100">
+                  {education.degree}
+                </h3>
+                <p className="mt-1 text-sm text-mist-500">{education.school}</p>
+              </div>
+            </div>
 
             {education.location && (
               <div className="mt-3 flex items-center gap-2">
