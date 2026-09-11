@@ -20,8 +20,8 @@ export const profile = {
   youtubeAvatar: "/kepikiranaja.jpg",
 
   // Ganti dengan path CV kamu. Taruh file PDF-nya di folder /public
-  cvDeveloperUrl: "/CV_Akmal_Developer.pdf",
-  cvCreativeUrl: "/CV_Akmal_Creative.pdf",
+  cvDeveloperUrl: "/CV/CV_Akmal_Developer.pdf",
+  cvCreativeUrl: "/CV/CV_Akmal_Creative.pdf",
 
   // Taruh foto di /public lalu ubah path-nya, contoh: "/foto-profil.jpg"
   photoUrl: "/Gambar/fixfoto.png",
