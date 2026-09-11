@@ -8,7 +8,7 @@ export default function Education() {
     <section className="section-green-atmosphere overflow-hidden">
       <div className="mx-auto max-w-6xl px-6 py-24 sm:py-32">
         <Reveal>
-        <SectionHeading index="08" title="Pendidikan & sertifikasi" />
+        <SectionHeading index="08" title="Education & Certifications" />
         </Reveal>
 
         <div className="grid gap-10 lg:grid-cols-[1fr_1.3fr] lg:gap-16">
