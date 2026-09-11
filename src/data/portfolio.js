@@ -7,7 +7,7 @@
 export const profile = {
   name: "Akmal Farizky Hardhana",
   firstName: "Akmal",
-  role: "Full-Stack Developer & Game Developer",
+  role: "Full-Stack Developer, Game Developer & Creator.",
   location: "Semarang, Jawa Tengah",
   email: "akmalfatizky@gmail.com",
   whatsapp: "+62 899-1855-149",
